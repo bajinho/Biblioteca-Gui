@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/AWTForms/Frame.java to edit this template
  */
-package com.client.mavenproject4;
+package com.client.bibliotecagui;
 
 import com.bajo.mavenproject1.bean.impl.PessoaRemote;
 import java.security.PrivilegedActionException;
