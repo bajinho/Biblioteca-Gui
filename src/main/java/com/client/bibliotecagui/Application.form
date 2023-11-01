@@ -49,10 +49,18 @@
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.DesignFlowLayout"/>
       <SubComponents>
-        <Component class="javax.swing.JButton" name="jButton1">
+        <Component class="javax.swing.JTextField" name="jTextFieldNomedaPessoa">
           <Properties>
-            <Property name="text" type="java.lang.String" value="jButton1"/>
+            <Property name="text" type="java.lang.String" value="Nome da Pessoa"/>
           </Properties>
+        </Component>
+        <Component class="javax.swing.JButton" name="jButtonAdicionarPessoa">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Adicionar Pessoa"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonAdicionarPessoaActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>
