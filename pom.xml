@@ -15,7 +15,7 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>mavenproject1</artifactId>
+            <artifactId>biblioteca</artifactId>
             <version>1.0-SNAPSHOT</version>
             <type>jar</type>
         </dependency>
@@ -71,7 +71,7 @@
     </build>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <exec.mainClass>com.bajo.mavenproject4.Mavenproject4</exec.mainClass>
+        <exec.mainClass>com.client.bibliotecagui.Application</exec.mainClass>
         <maven.compiler.release>21</maven.compiler.release>
         <maven.compiler.target>21</maven.compiler.target>
     </properties>

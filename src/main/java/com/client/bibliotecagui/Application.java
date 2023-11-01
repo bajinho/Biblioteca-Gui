@@ -4,7 +4,7 @@
  */
 package com.client.bibliotecagui;
 
-import com.bajo.mavenproject1.bean.impl.PessoaRemote;
+import com.bajo.biblioteca.bean.impl.PessoaRemote;
 import java.security.PrivilegedActionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -15,12 +15,12 @@ import javax.naming.NamingException;
  *
  * @author bajinho
  */
-public class Appication extends java.awt.Frame {
+public class Application extends java.awt.Frame {
 
     /**
      * Creates new form Appication
      */
-    public Appication() {
+    public Application() {
         initComponents();
     }
 
@@ -76,7 +76,7 @@ public class Appication extends java.awt.Frame {
     // Invoke a stateful bean
     public static void main(String[] args) throws NamingException, PrivilegedActionException, InterruptedException {
         java.awt.EventQueue.invokeLater(() -> {
-            new Appication().setVisible(true);
+            new Application().setVisible(true);
         });
         System.out.println("Hello World!");
         PessoaRemote pessoaRemote = invokeStatelessBean();
@@ -97,11 +97,11 @@ public class Appication extends java.awt.Frame {
     private static PessoaRemote invokeStatelessBean() {
         try {
             InitialContext context = Invoker.getContext();
-            return (PessoaRemote) context.lookup("ejb:/mavenproject1-1.0-SNAPSHOT/PessoaBean!"
+            return (PessoaRemote) context.lookup("ejb:/biblioteca-1.0-SNAPSHOT/PessoaBean!"
                     + PessoaRemote.class.getName());
         } catch (NamingException e) {
             System.out.println("ERROR!: " + e);
-            Logger.getLogger(Appication.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(Application.class.getName()).log(Level.SEVERE, null, e);
         }
 
         return null;
