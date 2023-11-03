@@ -37,12 +37,7 @@
             <version>10.0.0</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>org.netbeans.external</groupId>
-            <artifactId>org-apache-commons-lang</artifactId>
-            <version>RELEASE90</version>
-            <type>jar</type>
-        </dependency>
+
     </dependencies>
     <build>
         <plugins>
