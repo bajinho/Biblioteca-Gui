@@ -1,7 +1,10 @@
 package com.client.bibliotecagui;
 
+import com.bajo.biblioteca.bean.impl.LivroRemote;
 import com.bajo.biblioteca.bean.impl.PessoaRemote;
 import com.bajo.biblioteca.model.Pessoa;
+import com.bajo.biblioteca.model.Livro;
+import com.client.bibliotecagui.invoker.InvokerLivro;
 import com.client.bibliotecagui.invoker.InvokerPessoa;
 import org.apache.commons.lang.ArrayUtils;
 import java.util.HashMap;
@@ -10,6 +13,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
 
 
 /*
@@ -27,6 +32,7 @@ public class Application extends javax.swing.JFrame {
      */
     public Application() {
         initComponents();
+        jButtonExcluir.enable(false);
     }
 
     /**
@@ -38,6 +44,7 @@ public class Application extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jButton2 = new javax.swing.JButton();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
         jTextFieldNomedaPessoa = new javax.swing.JTextField();
@@ -45,28 +52,34 @@ public class Application extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTablePessoas = new javax.swing.JTable();
         jTextFieldPesquisarPessoa = new javax.swing.JTextField();
-        jButtonAtualizarFiltro = new javax.swing.JButton();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
+        jButtonAtualizarFiltroPessoa = new javax.swing.JButton();
+        jLabelAddPessoa = new javax.swing.JLabel();
+        jLabelFiltroPessoa = new javax.swing.JLabel();
+        jButtonExcluir = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
-        jTextField1 = new javax.swing.JTextField();
+        jTextFieldAutordoLivro = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
-        jCheckBox1 = new javax.swing.JCheckBox();
-        jButton1 = new javax.swing.JButton();
+        jTextFieldTitulodoLivro = new javax.swing.JTextField();
+        jButtonSalvarLivro = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jTableLivros = new javax.swing.JTable();
+        jLabelFiltroLivro = new javax.swing.JLabel();
+        jTextFieldFiltroLivro = new javax.swing.JTextField();
+        jButtonFiltroLivro = new javax.swing.JButton();
+        jButtonExcluirLivro = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         jTextField3 = new javax.swing.JTextField();
         jButtonAtualizarFiltro1 = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        jTableEmprestimo = new javax.swing.JTable();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
+
+        jButton2.setText("jButton2");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -88,23 +101,42 @@ public class Application extends javax.swing.JFrame {
             Class[] types = new Class [] {
                 java.lang.Long.class, java.lang.String.class
             };
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jTablePessoas.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTablePessoasMouseClicked(evt);
+            }
         });
         jScrollPane1.setViewportView(jTablePessoas);
 
-        jButtonAtualizarFiltro.setText("Filtrar");
-        jButtonAtualizarFiltro.addActionListener(new java.awt.event.ActionListener() {
+        jButtonAtualizarFiltroPessoa.setText("Atualizar");
+        jButtonAtualizarFiltroPessoa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonAtualizarFiltroActionPerformed(evt);
+                jButtonAtualizarFiltroPessoaActionPerformed(evt);
             }
         });
 
-        jLabel3.setText("Nome da Pessoa:");
+        jLabelAddPessoa.setText("Nome da Pessoa:");
 
-        jLabel4.setText("Nome da Pessoa:");
+        jLabelFiltroPessoa.setText("Nome da Pessoa:");
+
+        jButtonExcluir.setText("Excluir");
+        jButtonExcluir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonExcluirActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -113,21 +145,22 @@ public class Application extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 391, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel4))
+                            .addComponent(jLabelAddPessoa)
+                            .addComponent(jLabelFiltroPessoa))
                         .addGap(10, 10, 10)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(jTextFieldNomedaPessoa, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButtonAdicionarPessoa))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jTextFieldPesquisarPessoa, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButtonAtualizarFiltro)))))
+                            .addComponent(jTextFieldNomedaPessoa)
+                            .addComponent(jTextFieldPesquisarPessoa))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jButtonAdicionarPessoa, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButtonAtualizarFiltroPessoa, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jButtonExcluir)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -137,15 +170,17 @@ public class Application extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextFieldNomedaPessoa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButtonAdicionarPessoa)
-                    .addComponent(jLabel3))
+                    .addComponent(jLabelAddPessoa))
                 .addGap(10, 10, 10)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextFieldPesquisarPessoa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButtonAtualizarFiltro)
-                    .addComponent(jLabel4))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 414, Short.MAX_VALUE)
-                .addContainerGap())
+                    .addComponent(jButtonAtualizarFiltroPessoa)
+                    .addComponent(jLabelFiltroPessoa))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 744, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jButtonExcluir)
+                .addContainerGap(16, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Cadastrar Pessoas", jPanel1);
@@ -154,13 +189,16 @@ public class Application extends javax.swing.JFrame {
 
         jLabel2.setText("Autor:");
 
-        jTextField2.setToolTipText("");
+        jTextFieldTitulodoLivro.setToolTipText("");
 
-        jCheckBox1.setText("Emprestado");
+        jButtonSalvarLivro.setText("Salvar");
+        jButtonSalvarLivro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonSalvarLivroActionPerformed(evt);
+            }
+        });
 
-        jButton1.setText("Salvar");
-
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jTableLivros.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -176,7 +214,18 @@ public class Application extends javax.swing.JFrame {
                 return types [columnIndex];
             }
         });
-        jScrollPane2.setViewportView(jTable1);
+        jScrollPane2.setViewportView(jTableLivros);
+
+        jLabelFiltroLivro.setText("Livro:");
+
+        jButtonFiltroLivro.setText("Procurar");
+        jButtonFiltroLivro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonFiltroLivroActionPerformed(evt);
+            }
+        });
+
+        jButtonExcluirLivro.setText("Excluir");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -186,20 +235,27 @@ public class Application extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 391, Short.MAX_VALUE)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(jLabel2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jTextField1))
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(jLabel1)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jTextField2)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton1)
-                            .addComponent(jCheckBox1))))
+                                .addComponent(jTextFieldTitulodoLivro))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel2)
+                                    .addComponent(jLabelFiltroLivro))
+                                .addGap(13, 13, 13)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jTextFieldAutordoLivro)
+                                    .addComponent(jTextFieldFiltroLivro))))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jButtonFiltroLivro, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButtonSalvarLivro, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jButtonExcluirLivro)))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -208,16 +264,22 @@ public class Application extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jCheckBox1))
+                    .addComponent(jTextFieldTitulodoLivro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1))
+                    .addComponent(jTextFieldAutordoLivro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonSalvarLivro))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 406, Short.MAX_VALUE)
-                .addContainerGap())
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabelFiltroLivro)
+                    .addComponent(jTextFieldFiltroLivro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonFiltroLivro))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 713, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(jButtonExcluirLivro)
+                .addGap(17, 17, 17))
         );
 
         jTabbedPane1.addTab("Cadastrar Livros", jPanel2);
@@ -231,7 +293,7 @@ public class Application extends javax.swing.JFrame {
             }
         });
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        jTableEmprestimo.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -247,7 +309,7 @@ public class Application extends javax.swing.JFrame {
                 return types [columnIndex];
             }
         });
-        jScrollPane3.setViewportView(jTable2);
+        jScrollPane3.setViewportView(jTableEmprestimo);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -274,7 +336,7 @@ public class Application extends javax.swing.JFrame {
                     .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButtonAtualizarFiltro1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 446, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 826, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -310,10 +372,16 @@ public class Application extends javax.swing.JFrame {
         // TODO add your handling code here:
         PessoaRemote pessoaRemote = InvokerPessoa.invokePessoaStatelessBean();
         Pessoa p = new Pessoa();
-        p.setNome(jTextFieldNomedaPessoa.getText());
+        String nome = jTextFieldNomedaPessoa.getText();
+        p.setNome(nome);
         try {
-            pessoaRemote.salvar(p);
-            jTextFieldNomedaPessoa.setText("");
+            if (nome.isBlank() == false) {
+                System.out.println(jTextFieldNomedaPessoa.getText());    
+                pessoaRemote.salvar(p);
+                jTextFieldNomedaPessoa.setText("");
+//                JOptionPane.showMessageDialog(null, p.getNome() +  " salvo com sucesso!", "Salvo", JOptionPane.WARNING_MESSAGE);
+            } 
+
         } catch (Exception ex) {
             Logger.getLogger(Application.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -336,7 +404,7 @@ public class Application extends javax.swing.JFrame {
         return (Object[][]) array;
     }
 
-    private void jButtonAtualizarFiltroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAtualizarFiltroActionPerformed
+    private void jButtonAtualizarFiltroPessoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAtualizarFiltroPessoaActionPerformed
         // TODO add your handling code here:
         PessoaRemote pessoaRemote = InvokerPessoa.invokePessoaStatelessBean();
 //        System.out.print(listToMap(pessoaRemote.consultarPorNome(jTextFieldPesquisarPessoa.getText())));
@@ -355,11 +423,79 @@ public class Application extends javax.swing.JFrame {
                 return types[columnIndex];
             }
         });
-    }//GEN-LAST:event_jButtonAtualizarFiltroActionPerformed
+    }//GEN-LAST:event_jButtonAtualizarFiltroPessoaActionPerformed
+
 
     private void jButtonAtualizarFiltro1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAtualizarFiltro1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButtonAtualizarFiltro1ActionPerformed
+
+    private void jTablePessoasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTablePessoasMouseClicked
+        // TODO add your handling code here:
+        JTable source = (JTable)evt.getSource();
+        
+        int row = source.rowAtPoint( evt.getPoint() );
+//        int column = source.columnAtPoint( evt.getPoint() );
+
+        pessoaID = (Long) source.getValueAt(row, 0);
+        
+        if(pessoaID != null) {
+            jButtonExcluir.enable(true);
+            jButtonExcluir.repaint();
+        }
+
+        System.out.println(source.getValueAt(row, 0).toString());
+    }//GEN-LAST:event_jTablePessoasMouseClicked
+
+    private void jButtonExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonExcluirActionPerformed
+        // TODO add your handling code here:
+        PessoaRemote pessoaRemote = InvokerPessoa.invokePessoaStatelessBean();
+        pessoaRemote.excluir(pessoaID);
+//        jTable1.repaint();
+    }//GEN-LAST:event_jButtonExcluirActionPerformed
+
+    private void jButtonSalvarLivroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSalvarLivroActionPerformed
+        // TODO add your handling code here:
+        LivroRemote livroRemote = InvokerLivro.invokeLivroStatelessBean();
+        Livro l = new Livro();
+        String titulo = jTextFieldTitulodoLivro.getText();
+        String autor = jTextFieldAutordoLivro.getText();
+        l.setTitulo(titulo);
+        l.setAutor(autor);
+        try {
+            if (titulo.isBlank() == false || autor.isBlank() == false ) {
+                System.out.println(jTextFieldNomedaPessoa.getText());    
+                livroRemote.salvar(l);
+                jTextFieldTitulodoLivro.setText("");
+                jTextFieldAutordoLivro.setText("");
+//                JOptionPane.showMessageDialog(null, p.getNome() +  " salvo com sucesso!", "Salvo", JOptionPane.WARNING_MESSAGE);
+            } 
+
+        } catch (Exception ex) {
+            Logger.getLogger(Application.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButtonSalvarLivroActionPerformed
+
+    private void jButtonFiltroLivroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonFiltroLivroActionPerformed
+        // TODO add your handling code here:
+          LivroRemote livroRemote = InvokerLivro.invokeLivroStatelessBean();
+//        System.out.print(listToMap(pessoaRemote.consultarPorNome(jTextFieldPesquisarPessoa.getText())));
+        jTablePessoas.setModel(new javax.swing.table.DefaultTableModel(
+                listToMap(livroRemote. .consultarPorNome(jTextFieldPesquisarPessoa.getText())),
+                new String[]{
+                    "ID", "NOME"
+                }
+        ) {
+            Class[] types = new Class[]{
+                java.lang.Long.class, java.lang.String.class
+            };
+
+            @Override
+            public Class getColumnClass(int columnIndex) {
+                return types[columnIndex];
+            }
+        });
+    }//GEN-LAST:event_jButtonFiltroLivroActionPerformed
 
     /**
      * @param args the command line arguments
@@ -398,16 +534,20 @@ public class Application extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButtonAdicionarPessoa;
-    private javax.swing.JButton jButtonAtualizarFiltro;
     private javax.swing.JButton jButtonAtualizarFiltro1;
-    private javax.swing.JCheckBox jCheckBox1;
+    private javax.swing.JButton jButtonAtualizarFiltroPessoa;
+    private javax.swing.JButton jButtonExcluir;
+    private javax.swing.JButton jButtonExcluirLivro;
+    private javax.swing.JButton jButtonFiltroLivro;
+    private javax.swing.JButton jButtonSalvarLivro;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabelAddPessoa;
+    private javax.swing.JLabel jLabelFiltroLivro;
+    private javax.swing.JLabel jLabelFiltroPessoa;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
@@ -419,16 +559,19 @@ public class Application extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
+    private javax.swing.JTable jTableEmprestimo;
+    private javax.swing.JTable jTableLivros;
     private javax.swing.JTable jTablePessoas;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
+    private javax.swing.JTextField jTextFieldAutordoLivro;
+    private javax.swing.JTextField jTextFieldFiltroLivro;
     private javax.swing.JTextField jTextFieldNomedaPessoa;
     private javax.swing.JTextField jTextFieldPesquisarPessoa;
+    private javax.swing.JTextField jTextFieldTitulodoLivro;
     // End of variables declaration//GEN-END:variables
 
+    private Long pessoaID;
+    
     private Integer Integer(Long id) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
