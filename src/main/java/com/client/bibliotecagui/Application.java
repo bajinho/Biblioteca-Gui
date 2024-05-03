@@ -403,6 +403,23 @@ public class Application extends javax.swing.JFrame {
         }
         return (Object[][]) array;
     }
+    
+    private Object[][] listLivrosToMap(List list) {
+        Object[] array = null;
+        Map<Long, Object[][]> ret = new HashMap<>();
+
+        for (Iterator i = list.iterator(); i.hasNext();) {
+            Livro e = (Livro) i.next();
+
+            ret.put(e.getId(), new Object[][]{{e.getId(), e.getTitulo(), e.getAutor(), e.getEmprestado() == 0 ? "Não" : "Sim:"}});
+        }
+        for (Map.Entry<Long, Object[][]> property : ret.entrySet()) {
+            
+            array = ArrayUtils.addAll(array, property.getValue());
+            System.out.println(array);
+        }
+        return (Object[][]) array;
+    }
 
     private void jButtonAtualizarFiltroPessoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAtualizarFiltroPessoaActionPerformed
         // TODO add your handling code here:
@@ -480,19 +497,18 @@ public class Application extends javax.swing.JFrame {
         // TODO add your handling code here:
           LivroRemote livroRemote = InvokerLivro.invokeLivroStatelessBean();
 //        System.out.print(listToMap(pessoaRemote.consultarPorNome(jTextFieldPesquisarPessoa.getText())));
-        jTablePessoas.setModel(new javax.swing.table.DefaultTableModel(
-                listToMap(livroRemote. .consultarPorNome(jTextFieldPesquisarPessoa.getText())),
-                new String[]{
-                    "ID", "NOME"
-                }
+        jTableLivros.setModel(new javax.swing.table.DefaultTableModel(
+                listLivrosToMap(livroRemote.consultarPorTitulo(jTextFieldFiltroLivro.getText())),
+                  new String [] {
+                "ID", "TITULO", "AUTOR", "EMPRESTADO"
+            }
         ) {
-            Class[] types = new Class[]{
-                java.lang.Long.class, java.lang.String.class
+            Class[] types = new Class [] {
+                java.lang.Long.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
 
-            @Override
             public Class getColumnClass(int columnIndex) {
-                return types[columnIndex];
+                return types [columnIndex];
             }
         });
     }//GEN-LAST:event_jButtonFiltroLivroActionPerformed
