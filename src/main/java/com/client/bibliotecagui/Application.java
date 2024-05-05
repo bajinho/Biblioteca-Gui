@@ -6,14 +6,11 @@ import com.bajo.biblioteca.model.Pessoa;
 import com.bajo.biblioteca.model.Livro;
 import com.client.bibliotecagui.invoker.InvokerLivro;
 import com.client.bibliotecagui.invoker.InvokerPessoa;
-import org.apache.commons.lang.ArrayUtils;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import com.client.bibliotecagui.tables.LivrosTableModel;
+import com.client.bibliotecagui.tables.PessoasTableModel;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JOptionPane;
+//import javax.swing.JOptionPane;
 import javax.swing.JTable;
 
 
@@ -177,10 +174,10 @@ public class Application extends javax.swing.JFrame {
                     .addComponent(jButtonAtualizarFiltroPessoa)
                     .addComponent(jLabelFiltroPessoa))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 744, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 744, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addComponent(jButtonExcluir)
-                .addContainerGap(16, Short.MAX_VALUE))
+                .addGap(16, 16, 16))
         );
 
         jTabbedPane1.addTab("Cadastrar Pessoas", jPanel1);
@@ -376,70 +373,22 @@ public class Application extends javax.swing.JFrame {
         p.setNome(nome);
         try {
             if (nome.isBlank() == false) {
-                System.out.println(jTextFieldNomedaPessoa.getText());    
+                System.out.println(jTextFieldNomedaPessoa.getText());
                 pessoaRemote.salvar(p);
                 jTextFieldNomedaPessoa.setText("");
 //                JOptionPane.showMessageDialog(null, p.getNome() +  " salvo com sucesso!", "Salvo", JOptionPane.WARNING_MESSAGE);
-            } 
+            }
 
         } catch (Exception ex) {
             Logger.getLogger(Application.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jButtonAdicionarPessoaActionPerformed
 
-    private Object[][] listToMap(List list) {
-        Object[] array = null;
-        Map<Long, Object[][]> ret = new HashMap<>();
-
-        for (Iterator i = list.iterator(); i.hasNext();) {
-            Pessoa e = (Pessoa) i.next();
-
-            ret.put(e.getId(), new Object[][]{{e.getId(), e.getNome()}});
-        }
-        for (Map.Entry<Long, Object[][]> property : ret.entrySet()) {
-            
-            array = ArrayUtils.addAll(array, property.getValue());
-            System.out.println(array);
-        }
-        return (Object[][]) array;
-    }
-    
-    private Object[][] listLivrosToMap(List list) {
-        Object[] array = null;
-        Map<Long, Object[][]> ret = new HashMap<>();
-
-        for (Iterator i = list.iterator(); i.hasNext();) {
-            Livro e = (Livro) i.next();
-
-            ret.put(e.getId(), new Object[][]{{e.getId(), e.getTitulo(), e.getAutor(), e.getEmprestado() == 0 ? "Não" : "Sim:"}});
-        }
-        for (Map.Entry<Long, Object[][]> property : ret.entrySet()) {
-            
-            array = ArrayUtils.addAll(array, property.getValue());
-            System.out.println(array);
-        }
-        return (Object[][]) array;
-    }
 
     private void jButtonAtualizarFiltroPessoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAtualizarFiltroPessoaActionPerformed
         // TODO add your handling code here:
         PessoaRemote pessoaRemote = InvokerPessoa.invokePessoaStatelessBean();
-//        System.out.print(listToMap(pessoaRemote.consultarPorNome(jTextFieldPesquisarPessoa.getText())));
-        jTablePessoas.setModel(new javax.swing.table.DefaultTableModel(
-                listToMap(pessoaRemote.consultarPorNome(jTextFieldPesquisarPessoa.getText())),
-                new String[]{
-                    "ID", "NOME"
-                }
-        ) {
-            Class[] types = new Class[]{
-                java.lang.Long.class, java.lang.String.class
-            };
-
-            @Override
-            public Class getColumnClass(int columnIndex) {
-                return types[columnIndex];
-            }
-        });
+        jTablePessoas.setModel(new PessoasTableModel(pessoaRemote.consultarPorNome(jTextFieldPesquisarPessoa.getText())));
     }//GEN-LAST:event_jButtonAtualizarFiltroPessoaActionPerformed
 
 
@@ -449,14 +398,14 @@ public class Application extends javax.swing.JFrame {
 
     private void jTablePessoasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTablePessoasMouseClicked
         // TODO add your handling code here:
-        JTable source = (JTable)evt.getSource();
-        
-        int row = source.rowAtPoint( evt.getPoint() );
+        JTable source = (JTable) evt.getSource();
+
+        int row = source.rowAtPoint(evt.getPoint());
 //        int column = source.columnAtPoint( evt.getPoint() );
 
         pessoaID = (Long) source.getValueAt(row, 0);
-        
-        if(pessoaID != null) {
+
+        if (pessoaID != null) {
             jButtonExcluir.enable(true);
             jButtonExcluir.repaint();
         }
@@ -480,13 +429,13 @@ public class Application extends javax.swing.JFrame {
         l.setTitulo(titulo);
         l.setAutor(autor);
         try {
-            if (titulo.isBlank() == false || autor.isBlank() == false ) {
-                System.out.println(jTextFieldNomedaPessoa.getText());    
+            if (titulo.isBlank() == false || autor.isBlank() == false) {
+                System.out.println(jTextFieldNomedaPessoa.getText());
                 livroRemote.salvar(l);
                 jTextFieldTitulodoLivro.setText("");
                 jTextFieldAutordoLivro.setText("");
 //                JOptionPane.showMessageDialog(null, p.getNome() +  " salvo com sucesso!", "Salvo", JOptionPane.WARNING_MESSAGE);
-            } 
+            }
 
         } catch (Exception ex) {
             Logger.getLogger(Application.class.getName()).log(Level.SEVERE, null, ex);
@@ -495,22 +444,8 @@ public class Application extends javax.swing.JFrame {
 
     private void jButtonFiltroLivroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonFiltroLivroActionPerformed
         // TODO add your handling code here:
-          LivroRemote livroRemote = InvokerLivro.invokeLivroStatelessBean();
-//        System.out.print(listToMap(pessoaRemote.consultarPorNome(jTextFieldPesquisarPessoa.getText())));
-        jTableLivros.setModel(new javax.swing.table.DefaultTableModel(
-                listLivrosToMap(livroRemote.consultarPorTitulo(jTextFieldFiltroLivro.getText())),
-                  new String [] {
-                "ID", "TITULO", "AUTOR", "EMPRESTADO"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.Long.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-        });
+        LivroRemote livroRemote = InvokerLivro.invokeLivroStatelessBean();
+        jTableLivros.setModel(new LivrosTableModel(livroRemote.consultarPorTitulo(jTextFieldFiltroLivro.getText())));
     }//GEN-LAST:event_jButtonFiltroLivroActionPerformed
 
     /**
@@ -587,7 +522,7 @@ public class Application extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private Long pessoaID;
-    
+
     private Integer Integer(Long id) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
