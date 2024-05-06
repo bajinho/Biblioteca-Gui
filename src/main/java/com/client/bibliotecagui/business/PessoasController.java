@@ -1,0 +1,50 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package com.client.bibliotecagui.business;
+
+import com.bajo.biblioteca.bean.impl.PessoaRemote;
+import com.bajo.biblioteca.model.Pessoa;
+import com.client.bibliotecagui.invoker.InvokerPessoa;
+import java.util.List;
+
+/**
+ *
+ * @author bajinho
+ */
+public class PessoasController {
+
+    private final PessoaRemote pessoaRemote;
+
+    public PessoasController() {
+        this.pessoaRemote = InvokerPessoa.invokePessoaStatelessBean();
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    public void adicionar(String nome) throws Exception {
+        Pessoa p = new Pessoa();
+        p.setNome(nome);
+        if (nome.isBlank() == false) {
+            pessoaRemote.salvar(p);
+//                JOptionPane.showMessageDialog(null, p.getNome() +  " salvo com sucesso!", "Salvo", JOptionPane.WARNING_MESSAGE);
+        }
+        throw new UnsupportedOperationException("Não foi possivel salvar.");
+    }
+    
+    public void atualizar(Long id, String nome) throws Exception {
+        Pessoa p = pessoaRemote.consultarPorId(id);
+        p.setNome(nome);
+        pessoaRemote.salvar(p);
+        throw new UnsupportedOperationException("Não foi possivel atualizar");
+    }
+    
+    public List<Pessoa> filtrar(String nome) {
+        return pessoaRemote.consultarPorNome(nome);
+    }
+    
+    public void deletar(Long id) throws Exception {
+        pessoaRemote.excluir(id);
+        throw new UnsupportedOperationException("Não foi possivel deletar");
+    }
+}
