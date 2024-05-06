@@ -1,11 +1,9 @@
 package com.client.bibliotecagui;
 
 import com.bajo.biblioteca.bean.impl.LivroRemote;
-import com.bajo.biblioteca.bean.impl.PessoaRemote;
-import com.bajo.biblioteca.model.Pessoa;
 import com.bajo.biblioteca.model.Livro;
+import com.client.bibliotecagui.business.PessoasController;
 import com.client.bibliotecagui.invoker.InvokerLivro;
-import com.client.bibliotecagui.invoker.InvokerPessoa;
 import com.client.bibliotecagui.tables.LivrosTableModel;
 import com.client.bibliotecagui.tables.PessoasTableModel;
 import java.util.logging.Level;
@@ -28,6 +26,7 @@ public class Application extends javax.swing.JFrame {
      * Creates new form NewJFrame
      */
     public Application() {
+        this.pessoasController = new PessoasController();
         initComponents();
         jButtonExcluir.enable(false);
     }
@@ -367,28 +366,19 @@ public class Application extends javax.swing.JFrame {
 
     private void jButtonAdicionarPessoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAdicionarPessoaActionPerformed
         // TODO add your handling code here:
-        PessoaRemote pessoaRemote = InvokerPessoa.invokePessoaStatelessBean();
-        Pessoa p = new Pessoa();
         String nome = jTextFieldNomedaPessoa.getText();
-        p.setNome(nome);
         try {
-            if (nome.isBlank() == false) {
-                System.out.println(jTextFieldNomedaPessoa.getText());
-                pessoaRemote.salvar(p);
-                jTextFieldNomedaPessoa.setText("");
-//                JOptionPane.showMessageDialog(null, p.getNome() +  " salvo com sucesso!", "Salvo", JOptionPane.WARNING_MESSAGE);
-            }
-
+            pessoasController.adicionar(nome);
         } catch (Exception ex) {
             Logger.getLogger(Application.class.getName()).log(Level.SEVERE, null, ex);
         }
+        jTextFieldNomedaPessoa.setText("");
     }//GEN-LAST:event_jButtonAdicionarPessoaActionPerformed
 
 
     private void jButtonAtualizarFiltroPessoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAtualizarFiltroPessoaActionPerformed
         // TODO add your handling code here:
-        PessoaRemote pessoaRemote = InvokerPessoa.invokePessoaStatelessBean();
-        jTablePessoas.setModel(new PessoasTableModel(pessoaRemote.consultarPorNome(jTextFieldPesquisarPessoa.getText())));
+        jTablePessoas.setModel(new PessoasTableModel(pessoasController.filtrar(jTextFieldPesquisarPessoa.getText())));
     }//GEN-LAST:event_jButtonAtualizarFiltroPessoaActionPerformed
 
 
@@ -401,9 +391,10 @@ public class Application extends javax.swing.JFrame {
         JTable source = (JTable) evt.getSource();
 
         int row = source.rowAtPoint(evt.getPoint());
-//        int column = source.columnAtPoint( evt.getPoint() );
+        int column = source.columnAtPoint(evt.getPoint());
 
         pessoaID = (Long) source.getValueAt(row, 0);
+        pessoaNome = (String) source.getValueAt(0, column);
 
         if (pessoaID != null) {
             jButtonExcluir.enable(true);
@@ -411,13 +402,17 @@ public class Application extends javax.swing.JFrame {
         }
 
         System.out.println(source.getValueAt(row, 0).toString());
+        System.out.println(source.getValueAt(row, column).toString());
     }//GEN-LAST:event_jTablePessoasMouseClicked
 
     private void jButtonExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonExcluirActionPerformed
-        // TODO add your handling code here:
-        PessoaRemote pessoaRemote = InvokerPessoa.invokePessoaStatelessBean();
-        pessoaRemote.excluir(pessoaID);
+        try {
+            // TODO add your handling code here:
+            pessoasController.deletar(pessoaID);
 //        jTable1.repaint();
+        } catch (Exception ex) {
+            Logger.getLogger(Application.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jButtonExcluirActionPerformed
 
     private void jButtonSalvarLivroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSalvarLivroActionPerformed
@@ -521,7 +516,9 @@ public class Application extends javax.swing.JFrame {
     private javax.swing.JTextField jTextFieldTitulodoLivro;
     // End of variables declaration//GEN-END:variables
 
+    private PessoasController pessoasController;
     private Long pessoaID;
+    private String pessoaNome;
 
     private Integer Integer(Long id) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody

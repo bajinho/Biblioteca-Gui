@@ -5,7 +5,10 @@
 package com.client.bibliotecagui.tables;
 
 import com.bajo.biblioteca.model.Pessoa;
+import com.client.bibliotecagui.business.PessoasController;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.table.AbstractTableModel;
 
 /**
@@ -13,6 +16,8 @@ import javax.swing.table.AbstractTableModel;
  * @author bajinho
  */
 public class PessoasTableModel extends AbstractTableModel {
+
+    private PessoasController pessoasController;
 
     private final List<Pessoa> pessoasList;
 
@@ -31,7 +36,6 @@ public class PessoasTableModel extends AbstractTableModel {
 //    public Class getColumnClass(int columnIndex) {
 //        return types[columnIndex];
 //    }
-
     public PessoasTableModel(List<Pessoa> pessoasList) {
         this.pessoasList = pessoasList;
     }
@@ -80,6 +84,14 @@ public class PessoasTableModel extends AbstractTableModel {
         } else if (1 == columnIndex) {
             row.setNome((String) aValue);
         }
+
+        pessoasController = new PessoasController();
+        try {
+            pessoasController.atualizar(row);
+        } catch (Exception ex) {
+            Logger.getLogger(PessoasTableModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
 
 }
