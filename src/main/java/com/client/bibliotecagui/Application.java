@@ -1,9 +1,7 @@
 package com.client.bibliotecagui;
 
-import com.bajo.biblioteca.bean.impl.LivroRemote;
-import com.bajo.biblioteca.model.Livro;
+import com.client.bibliotecagui.business.LivrosController;
 import com.client.bibliotecagui.business.PessoasController;
-import com.client.bibliotecagui.invoker.InvokerLivro;
 import com.client.bibliotecagui.tables.LivrosTableModel;
 import com.client.bibliotecagui.tables.PessoasTableModel;
 import java.util.logging.Level;
@@ -27,6 +25,7 @@ public class Application extends javax.swing.JFrame {
      */
     public Application() {
         this.pessoasController = new PessoasController();
+        this.livrosController = new LivrosController();
         initComponents();
         jButtonExcluir.enable(false);
     }
@@ -210,6 +209,11 @@ public class Application extends javax.swing.JFrame {
                 return types [columnIndex];
             }
         });
+        jTableLivros.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTablePessoasMouseClicked(evt);
+            }
+        });
         jScrollPane2.setViewportView(jTableLivros);
 
         jLabelFiltroLivro.setText("Livro:");
@@ -222,6 +226,11 @@ public class Application extends javax.swing.JFrame {
         });
 
         jButtonExcluirLivro.setText("Excluir");
+        jButtonExcluirLivro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonExcluirLivroActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -370,7 +379,7 @@ public class Application extends javax.swing.JFrame {
         try {
             pessoasController.adicionar(nome);
         } catch (Exception ex) {
-            Logger.getLogger(Application.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Application.class.getName()).log(Level.SEVERE, evt.toString(), ex);
         }
         jTextFieldNomedaPessoa.setText("");
     }//GEN-LAST:event_jButtonAdicionarPessoaActionPerformed
@@ -378,7 +387,12 @@ public class Application extends javax.swing.JFrame {
 
     private void jButtonAtualizarFiltroPessoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAtualizarFiltroPessoaActionPerformed
         // TODO add your handling code here:
-        jTablePessoas.setModel(new PessoasTableModel(pessoasController.filtrar(jTextFieldPesquisarPessoa.getText())));
+        try {
+            jTablePessoas.setModel(new PessoasTableModel(pessoasController.filtrar(jTextFieldPesquisarPessoa.getText())));
+        } catch (Exception ex) {
+            Logger.getLogger(Application.class.getName()).log(Level.SEVERE, evt.toString(), ex);
+        }
+
     }//GEN-LAST:event_jButtonAtualizarFiltroPessoaActionPerformed
 
 
@@ -391,57 +405,60 @@ public class Application extends javax.swing.JFrame {
         JTable source = (JTable) evt.getSource();
 
         int row = source.rowAtPoint(evt.getPoint());
-        int column = source.columnAtPoint(evt.getPoint());
+//        int column = source.columnAtPoint(evt.getPoint());
+        idFromTable = (Long) source.getValueAt(row, 0);
 
-        pessoaID = (Long) source.getValueAt(row, 0);
-        pessoaNome = (String) source.getValueAt(0, column);
-
-        if (pessoaID != null) {
+        if (idFromTable != null) {
             jButtonExcluir.enable(true);
             jButtonExcluir.repaint();
         }
-
-        System.out.println(source.getValueAt(row, 0).toString());
-        System.out.println(source.getValueAt(row, column).toString());
     }//GEN-LAST:event_jTablePessoasMouseClicked
 
     private void jButtonExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonExcluirActionPerformed
         try {
             // TODO add your handling code here:
-            pessoasController.deletar(pessoaID);
+            pessoasController.deletar(idFromTable);
 //        jTable1.repaint();
         } catch (Exception ex) {
-            Logger.getLogger(Application.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Application.class.getName()).log(Level.SEVERE, evt.toString(), ex);
         }
     }//GEN-LAST:event_jButtonExcluirActionPerformed
 
     private void jButtonSalvarLivroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSalvarLivroActionPerformed
         // TODO add your handling code here:
-        LivroRemote livroRemote = InvokerLivro.invokeLivroStatelessBean();
-        Livro l = new Livro();
+
         String titulo = jTextFieldTitulodoLivro.getText();
         String autor = jTextFieldAutordoLivro.getText();
-        l.setTitulo(titulo);
-        l.setAutor(autor);
         try {
-            if (titulo.isBlank() == false || autor.isBlank() == false) {
-                System.out.println(jTextFieldNomedaPessoa.getText());
-                livroRemote.salvar(l);
-                jTextFieldTitulodoLivro.setText("");
-                jTextFieldAutordoLivro.setText("");
-//                JOptionPane.showMessageDialog(null, p.getNome() +  " salvo com sucesso!", "Salvo", JOptionPane.WARNING_MESSAGE);
-            }
-
+            livrosController.adicionar(titulo, autor);
         } catch (Exception ex) {
-            Logger.getLogger(Application.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Application.class.getName()).log(Level.SEVERE, evt.toString(), ex);
         }
+        jTextFieldTitulodoLivro.setText("");
+        jTextFieldAutordoLivro.setText("");
+
     }//GEN-LAST:event_jButtonSalvarLivroActionPerformed
 
     private void jButtonFiltroLivroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonFiltroLivroActionPerformed
         // TODO add your handling code here:
-        LivroRemote livroRemote = InvokerLivro.invokeLivroStatelessBean();
-        jTableLivros.setModel(new LivrosTableModel(livroRemote.consultarPorTitulo(jTextFieldFiltroLivro.getText())));
+        try {
+            jTableLivros.setModel(new LivrosTableModel(livrosController.filtrar(jTextFieldFiltroLivro.getText())));
+        } catch (Exception ex) {
+            Logger.getLogger(Application.class.getName()).log(Level.SEVERE, evt.toString(), ex);
+        }
+
     }//GEN-LAST:event_jButtonFiltroLivroActionPerformed
+
+    private void jButtonExcluirLivroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonExcluirLivroActionPerformed
+        // TODO add your handling code here:
+        try {
+            // TODO add your handling code here:
+            livrosController.deletar(idFromTable);
+//        jTable1.repaint();
+        } catch (Exception ex) {
+            Logger.getLogger(Application.class.getName()).log(Level.SEVERE, evt.toString(), ex);
+        }
+    }//GEN-LAST:event_jButtonExcluirLivroActionPerformed
 
     /**
      * @param args the command line arguments
@@ -516,11 +533,8 @@ public class Application extends javax.swing.JFrame {
     private javax.swing.JTextField jTextFieldTitulodoLivro;
     // End of variables declaration//GEN-END:variables
 
-    private PessoasController pessoasController;
-    private Long pessoaID;
-    private String pessoaNome;
+    private final PessoasController pessoasController;
+    private final LivrosController livrosController;
+    private Long idFromTable;
 
-    private Integer Integer(Long id) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
 }

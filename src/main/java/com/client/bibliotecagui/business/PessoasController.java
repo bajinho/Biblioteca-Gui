@@ -30,7 +30,6 @@ public class PessoasController {
             pessoaRemote.salvar(p);
 //                JOptionPane.showMessageDialog(null, p.getNome() +  " salvo com sucesso!", "Salvo", JOptionPane.WARNING_MESSAGE);
         }
-        throw new UnsupportedOperationException("Não foi possivel salvar.");
     }
 
     public void atualizar(Pessoa pessoa) throws Exception {
@@ -39,8 +38,6 @@ public class PessoasController {
         } catch (Exception ex) {
             Logger.getLogger(PessoasController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        System.out.println(pessoa.toString());
-//        throw new UnsupportedOperationException("Não foi possivel atualizar");
     }
 
     public List<Pessoa> filtrar(String nome) {
@@ -49,6 +46,5 @@ public class PessoasController {
 
     public void deletar(Long id) throws Exception {
         pessoaRemote.excluir(id);
-        throw new UnsupportedOperationException("Não foi possivel deletar");
     }
 }
