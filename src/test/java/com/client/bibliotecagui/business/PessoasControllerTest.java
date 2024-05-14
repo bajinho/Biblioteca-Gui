@@ -13,11 +13,15 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.TestMethodOrder;
 
 /**
  *
  * @author bajinho
  */
+@TestMethodOrder(OrderAnnotation.class)
 public class PessoasControllerTest {
     
     private final PessoasController instance = new PessoasController();
@@ -45,6 +49,7 @@ public class PessoasControllerTest {
      * Test of adicionar method, of class PessoasController.
      */
     @Test
+    @Order(1)
     public void testAdicionar() throws Exception {
         System.out.println("adicionar");
         String nome = "teste";
@@ -55,6 +60,7 @@ public class PessoasControllerTest {
      * Test of atualizar method, of class PessoasController.
      */
     @Test
+    @Order(2)
     public void testAtualizar() throws Exception {
         System.out.println("atualizar");
         Pessoa pessoa = instance.filtrar("teste").getFirst();
@@ -66,6 +72,7 @@ public class PessoasControllerTest {
      * Test of filtrar method, of class PessoasController.
      */
     @Test
+    @Order(3)
     public void testFiltrar() {
         System.out.println("filtrar");
         String nome = "teste";
@@ -82,6 +89,7 @@ public class PessoasControllerTest {
      * Test of deletar method, of class PessoasController.
      */
     @Test
+    @Order(4)
     public void testDeletar() throws Exception {
         System.out.println("deletar");
         Long id = instance.filtrar("teste").getFirst().getId();
