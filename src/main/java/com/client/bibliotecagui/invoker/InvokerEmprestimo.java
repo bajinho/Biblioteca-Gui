@@ -22,7 +22,7 @@ public class InvokerEmprestimo {
      *
      * @return
      */
-    public static EmprestimoRemote invokePessoaStatelessBean() {
+    public static EmprestimoRemote invokeEmprestimoStatelessBean() {
         try {
             InitialContext context = Invoker.getContext();
             return (EmprestimoRemote) context.lookup("ejb:/biblioteca-1.0-SNAPSHOT/EmprestimoBean!"

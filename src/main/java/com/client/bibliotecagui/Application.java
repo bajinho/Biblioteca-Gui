@@ -1,7 +1,9 @@
 package com.client.bibliotecagui;
 
+import com.client.bibliotecagui.business.EmprestimosController;
 import com.client.bibliotecagui.business.LivrosController;
 import com.client.bibliotecagui.business.PessoasController;
+import com.client.bibliotecagui.tables.EmprestimosViewTableModel;
 import com.client.bibliotecagui.tables.LivrosTableModel;
 import com.client.bibliotecagui.tables.PessoasTableModel;
 import java.util.logging.Level;
@@ -26,6 +28,7 @@ public class Application extends javax.swing.JFrame {
     public Application() {
         this.pessoasController = new PessoasController();
         this.livrosController = new LivrosController();
+        this.emprestimosController = new EmprestimosController();
         initComponents();
         jButtonExcluir.enable(false);
     }
@@ -65,7 +68,7 @@ public class Application extends javax.swing.JFrame {
         jButtonExcluirLivro = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
+        jTextFieldFiltroEmprestimo = new javax.swing.JTextField();
         jButtonAtualizarFiltro1 = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
         jTableEmprestimo = new javax.swing.JTable();
@@ -291,6 +294,8 @@ public class Application extends javax.swing.JFrame {
 
         jLabel5.setText("Livro/Pessoa:");
 
+        jTextFieldFiltroEmprestimo.setName(""); // NOI18N
+
         jButtonAtualizarFiltro1.setText("Filtrar");
         jButtonAtualizarFiltro1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -327,7 +332,7 @@ public class Application extends javax.swing.JFrame {
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField3)
+                        .addComponent(jTextFieldFiltroEmprestimo)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButtonAtualizarFiltro1)))
                 .addContainerGap())
@@ -338,7 +343,7 @@ public class Application extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextFieldFiltroEmprestimo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButtonAtualizarFiltro1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 826, Short.MAX_VALUE)
@@ -392,12 +397,16 @@ public class Application extends javax.swing.JFrame {
         } catch (Exception ex) {
             Logger.getLogger(Application.class.getName()).log(Level.SEVERE, evt.toString(), ex);
         }
-
     }//GEN-LAST:event_jButtonAtualizarFiltroPessoaActionPerformed
 
 
     private void jButtonAtualizarFiltro1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAtualizarFiltro1ActionPerformed
         // TODO add your handling code here:
+        try {
+            jTableEmprestimo.setModel(new EmprestimosViewTableModel(emprestimosController.filtrar(jTextFieldFiltroEmprestimo.getText())));
+        } catch (Exception ex) {
+            Logger.getLogger(Application.class.getName()).log(Level.SEVERE, evt.toString(), ex);
+        }
     }//GEN-LAST:event_jButtonAtualizarFiltro1ActionPerformed
 
     private void jTablePessoasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTablePessoasMouseClicked
@@ -525,8 +534,8 @@ public class Application extends javax.swing.JFrame {
     private javax.swing.JTable jTableEmprestimo;
     private javax.swing.JTable jTableLivros;
     private javax.swing.JTable jTablePessoas;
-    private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextFieldAutordoLivro;
+    private javax.swing.JTextField jTextFieldFiltroEmprestimo;
     private javax.swing.JTextField jTextFieldFiltroLivro;
     private javax.swing.JTextField jTextFieldNomedaPessoa;
     private javax.swing.JTextField jTextFieldPesquisarPessoa;
@@ -535,6 +544,7 @@ public class Application extends javax.swing.JFrame {
 
     private final PessoasController pessoasController;
     private final LivrosController livrosController;
+    private final EmprestimosController emprestimosController;
     private Long idFromTable;
 
 }

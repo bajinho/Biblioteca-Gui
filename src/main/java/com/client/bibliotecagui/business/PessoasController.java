@@ -41,6 +41,7 @@ public class PessoasController {
     }
 
     public List<Pessoa> filtrar(String nome) {
+        System.out.print(pessoaRemote.consultarPorNome(nome));
         return pessoaRemote.consultarPorNome(nome);
     }
 

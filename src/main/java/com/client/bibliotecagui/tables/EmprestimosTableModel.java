@@ -4,34 +4,39 @@
  */
 package com.client.bibliotecagui.tables;
 
-import com.bajo.biblioteca.model.Livro;
-import com.client.bibliotecagui.business.LivrosController;
+import com.bajo.biblioteca.model.Emprestimo;
+import java.util.Date;
+import com.client.bibliotecagui.business.EmprestimosController;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.table.AbstractTableModel;
 
-/** Classe para gerar tabela em tempo de execução.
- *  
+/**
+ *
  * @author bajinho
  */
-public class LivrosTableModel extends AbstractTableModel {
+public class EmprestimosTableModel extends AbstractTableModel {
 
-    private final LivrosController livrosController;
+    private final EmprestimosController emprestimosController;
 
-    private final List<Livro> livrosList;
+    private final List<Emprestimo> emprestimosList;
 
     private final String[] columnNames = new String[]{
-        "ID", "TITULO", "AUTOR", "EMPRESTADO"
+        "ID", "LIVRO", "PESSOA", "DATA EMPRESTIMO", "DATA DEVOLUÇÃO"
     };
     private final Class[] columnClass = new Class[]{
-        java.lang.Long.class, java.lang.String.class, java.lang.String.class, java.lang.Boolean.class
+        java.lang.Long.class,
+        java.util.Date.class,
+        java.util.Date.class,
+        java.lang.Long.class,
+        java.lang.Long.class
     };
 
-    public LivrosTableModel(List<Livro> livrosList) {
-        this.livrosList = livrosList;
-        this.livrosController = new LivrosController();
-        System.out.print(livrosList.getFirst().getAutor());
+    public EmprestimosTableModel(List<Emprestimo> emprestimosList) {
+        this.emprestimosList = emprestimosList;
+        this.emprestimosController = new EmprestimosController();
+        System.out.print(emprestimosList.getFirst().getDatadevolucao());
     }
 
     @Override
@@ -51,25 +56,26 @@ public class LivrosTableModel extends AbstractTableModel {
 
     @Override
     public int getRowCount() {
-        return livrosList.size();
+        return emprestimosList.size();
     }
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        Livro row = livrosList.get(rowIndex);
+        Emprestimo row = emprestimosList.get(rowIndex);
         return switch (columnIndex) {
             case 0 ->
                 row.getId();
             case 1 ->
-                row.getTitulo();
+                row.getDatadevolucao();
             case 2 ->
-                row.getAutor();
+                row.getDataemprestimo();
             case 3 ->
-                row.getEmprestado() == 0 ? false : true;
+                row.getPessoa_id();
+            case 4 ->
+                row.getLivro_id();
             default ->
                 null;
         };
-
     }
 
     @Override
@@ -77,33 +83,30 @@ public class LivrosTableModel extends AbstractTableModel {
         return true;
     }
 
-    /** Método pra desestruturar Objeto e inserir os campos na tabela
-     * 
-     * @param aValue
-     * @param rowIndex
-     * @param columnIndex 
-     */
     @Override
     public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
-        Livro row = livrosList.get(rowIndex);
+        Emprestimo row = emprestimosList.get(rowIndex);
         switch (columnIndex) {
             case 0 ->
                 row.setId((Long) aValue);
             case 1 ->
-                row.setTitulo((String) aValue);
+                row.setDatadevolucao((Date) aValue);
             case 2 ->
-                row.setAutor((String) aValue);
+                row.setDataemprestimo((Date) aValue);
             case 3 ->
-                row.setEmprestado((Boolean) aValue == false ? 0 : 1);
+                row.setPessoa_id((Long) aValue);
+            case 4 ->
+                row.setLivro_id((Long) aValue);
             default -> {
             }
         }
-        
+
         try {
-            livrosController.atualizar(row);
+            emprestimosController.atualizar(row);
         } catch (Exception ex) {
-            Logger.getLogger(PessoasTableModel.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(EmprestimosTableModel.class.getName()).log(Level.SEVERE, null, ex);
         }
+
     }
 
 }

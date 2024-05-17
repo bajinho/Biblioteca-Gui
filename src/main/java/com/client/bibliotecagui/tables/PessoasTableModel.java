@@ -63,6 +63,7 @@ public class PessoasTableModel extends AbstractTableModel {
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         Pessoa row = pessoasList.get(rowIndex);
+        System.out.println("ERROR!:" + row);
         if (0 == columnIndex) {
             return row.getId();
         } else if (1 == columnIndex) {
