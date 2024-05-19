@@ -4,24 +4,44 @@
  */
 package com.client.bibliotecagui.tables;
 
+import com.bajo.biblioteca.model.Pessoa;
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
-
+import org.junit.jupiter.api.TestInstance;
 /**
  *
  * @author bajinho
  */
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class PessoasTableModelTest {
     
+
+    private PessoasTableModel instance;
+    
+    private final List<Pessoa> pessoa = new ArrayList();
+    
+    private final Pessoa p = new Pessoa();
+    
     public PessoasTableModelTest() {
+
     }
     
+    private final String[] columnNames = new String[]{
+        "ID", "NAME"
+    };
+    
     @BeforeAll
-    public static void setUpClass() {
+    public void setUpClass() {
+         p.setId(100L);
+        p.setNome("PessoaNomeTest");
+        pessoa.add(p);
+        this.instance = new PessoasTableModel(pessoa);
     }
     
     @AfterAll
@@ -43,8 +63,7 @@ public class PessoasTableModelTest {
     public void testGetColumnName() {
         System.out.println("getColumnName");
         int column = 0;
-        PessoasTableModel instance = null;
-        String expResult = "";
+        String expResult = columnNames[column];
         String result = instance.getColumnName(column);
         assertEquals(expResult, result);
     }
@@ -56,8 +75,7 @@ public class PessoasTableModelTest {
     public void testGetColumnClass() {
         System.out.println("getColumnClass");
         int columnIndex = 0;
-        PessoasTableModel instance = null;
-        Class expResult = null;
+        Class expResult = java.lang.Long.class;
         Class result = instance.getColumnClass(columnIndex);
         assertEquals(expResult, result);
     }
@@ -67,9 +85,8 @@ public class PessoasTableModelTest {
      */
     @Test
     public void testGetColumnCount() {
-        System.out.println("getColumnCount");
-        PessoasTableModel instance = null;
-        int expResult = 0;
+        System.out.println("getColumnCount");        
+        int expResult = 2;
         int result = instance.getColumnCount();
         assertEquals(expResult, result);
     }
@@ -80,8 +97,7 @@ public class PessoasTableModelTest {
     @Test
     public void testGetRowCount() {
         System.out.println("getRowCount");
-        PessoasTableModel instance = null;
-        int expResult = 0;
+        int expResult = 1;
         int result = instance.getRowCount();
         assertEquals(expResult, result);
     }
@@ -94,7 +110,6 @@ public class PessoasTableModelTest {
         System.out.println("getValueAt");
         int rowIndex = 0;
         int columnIndex = 0;
-        PessoasTableModel instance = null;
         Object expResult = null;
         Object result = instance.getValueAt(rowIndex, columnIndex);
         assertEquals(expResult, result);
@@ -108,8 +123,7 @@ public class PessoasTableModelTest {
         System.out.println("isCellEditable");
         int rowIndex = 0;
         int columnIndex = 0;
-        PessoasTableModel instance = null;
-        boolean expResult = false;
+        boolean expResult = true;
         boolean result = instance.isCellEditable(rowIndex, columnIndex);
         assertEquals(expResult, result);
     }
@@ -123,7 +137,6 @@ public class PessoasTableModelTest {
         Object aValue = null;
         int rowIndex = 0;
         int columnIndex = 0;
-        PessoasTableModel instance = null;
         instance.setValueAt(aValue, rowIndex, columnIndex);
     }
     
