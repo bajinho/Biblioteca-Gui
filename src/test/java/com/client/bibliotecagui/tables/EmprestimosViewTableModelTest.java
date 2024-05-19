@@ -17,7 +17,6 @@ import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
-import org.mockito.InjectMocks;
 
 /**
  *
@@ -33,7 +32,6 @@ public class EmprestimosViewTableModelTest {
 //    @Mock
     private EmprestimosViewTableModel instance;
     
-    @InjectMocks
     private final List<EmprestimoView> emprestimoView = new ArrayList();
     
     private final EmprestimoView e = new EmprestimoView();
