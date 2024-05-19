@@ -14,44 +14,44 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.TestInstance;
+
 /**
  *
  * @author bajinho
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class PessoasTableModelTest {
-    
 
     private PessoasTableModel instance;
-    
-    private final List<Pessoa> pessoa = new ArrayList();
-    
-    private final Pessoa p = new Pessoa();
-    
-    public PessoasTableModelTest() {
 
-    }
-    
+    private final List<Pessoa> pessoa = new ArrayList();
+
+    private final Pessoa p = new Pessoa();
+
     private final String[] columnNames = new String[]{
         "ID", "NAME"
     };
-    
+
+    public PessoasTableModelTest() {
+
+    }
+
     @BeforeAll
     public void setUpClass() {
-         p.setId(100L);
+        p.setId(100L);
         p.setNome("PessoaNomeTest");
         pessoa.add(p);
         this.instance = new PessoasTableModel(pessoa);
     }
-    
+
     @AfterAll
     public static void tearDownClass() {
     }
-    
+
     @BeforeEach
     public void setUp() {
     }
-    
+
     @AfterEach
     public void tearDown() {
     }
@@ -70,14 +70,19 @@ public class PessoasTableModelTest {
 
     /**
      * Test of getColumnClass method, of class PessoasTableModel.
+     * for x = columnIndex
      */
     @Test
     public void testGetColumnClass() {
         System.out.println("getColumnClass");
-        int columnIndex = 0;
-        Class expResult = java.lang.Long.class;
-        Class result = instance.getColumnClass(columnIndex);
-        assertEquals(expResult, result);
+        for (int x = 0; x <= instance.getColumnCount(); x++) {
+            
+            if (0 == x) {
+                assertEquals(java.lang.Long.class, instance.getColumnClass(x));
+            } else if (1 == x) {
+                assertEquals(java.lang.String.class, instance.getColumnClass(x));
+            }
+        }
     }
 
     /**
@@ -85,7 +90,7 @@ public class PessoasTableModelTest {
      */
     @Test
     public void testGetColumnCount() {
-        System.out.println("getColumnCount");        
+        System.out.println("getColumnCount");
         int expResult = 2;
         int result = instance.getColumnCount();
         assertEquals(expResult, result);
@@ -139,5 +144,5 @@ public class PessoasTableModelTest {
         int columnIndex = 0;
         instance.setValueAt(aValue, rowIndex, columnIndex);
     }
-    
+
 }
