@@ -26,10 +26,6 @@ import org.junit.jupiter.api.TestMethodOrder;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class EmprestimosViewTableModelTest {
 
-//    @InjectMocks
-//    private EmprestimoDAO dao;
-
-//    @Mock
     private EmprestimosViewTableModel instance;
     
     private final List<EmprestimoView> emprestimoView = new ArrayList();
@@ -46,8 +42,11 @@ public class EmprestimosViewTableModelTest {
     @BeforeAll
     public void setUpClass() {
         e.setId(1L);
-        e.setNome("Livro");
-        e.setAutor("Autor");
+        e.setLivroId((int) 1L);
+        e.setPessoaId((int) 1L);
+        e.setTitulo("EmprestimoTituloTeste");
+        e.setNome("EmprestimoNomeTeste");
+        e.setAutor("EmprestimoAutorTeste");
         emprestimoView.add(e);
         this.instance = new EmprestimosViewTableModel(emprestimoView);
     }
