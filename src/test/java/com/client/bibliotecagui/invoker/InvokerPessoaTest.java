@@ -5,6 +5,8 @@
 package com.client.bibliotecagui.invoker;
 
 import com.bajo.biblioteca.bean.impl.PessoaRemote;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,7 +20,12 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 public class InvokerPessoaTest {
     
-    public InvokerPessoaTest() {
+    private final InitialContext context = Invoker.getContext();
+    private final Object lookup;
+    
+    public InvokerPessoaTest() throws NamingException {
+        this.lookup = context.lookup("ejb:/biblioteca-1.0-SNAPSHOT/PessoaBean!"
+                + PessoaRemote.class.getName());
     }
     
     @BeforeAll
@@ -43,11 +50,9 @@ public class InvokerPessoaTest {
     @Test
     public void testInvokePessoaStatelessBean() {
         System.out.println("invokePessoaStatelessBean");
-        PessoaRemote expResult = null;
+        PessoaRemote expResult = (PessoaRemote) lookup;
         PessoaRemote result = InvokerPessoa.invokePessoaStatelessBean();
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
     
 }
