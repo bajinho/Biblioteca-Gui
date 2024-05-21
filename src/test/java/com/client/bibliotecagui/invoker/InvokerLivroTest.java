@@ -5,6 +5,8 @@
 package com.client.bibliotecagui.invoker;
 
 import com.bajo.biblioteca.bean.impl.LivroRemote;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,22 +19,27 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author bajinho
  */
 public class InvokerLivroTest {
-    
-    public InvokerLivroTest() {
+
+    private final InitialContext context = Invoker.getContext();
+    private final Object lookup;
+
+    public InvokerLivroTest() throws NamingException {
+        this.lookup = context.lookup("ejb:/biblioteca-1.0-SNAPSHOT/LivroBean!"
+                + LivroRemote.class.getName());
     }
-    
+
     @BeforeAll
     public static void setUpClass() {
     }
-    
+
     @AfterAll
     public static void tearDownClass() {
     }
-    
+
     @BeforeEach
     public void setUp() {
     }
-    
+
     @AfterEach
     public void tearDown() {
     }
@@ -43,11 +50,9 @@ public class InvokerLivroTest {
     @Test
     public void testInvokeLivroStatelessBean() {
         System.out.println("invokeLivroStatelessBean");
-        LivroRemote expResult = null;
+        LivroRemote expResult = (LivroRemote) lookup;
         LivroRemote result = InvokerLivro.invokeLivroStatelessBean();
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
-    
+
 }
