@@ -4,7 +4,9 @@
  */
 package com.client.bibliotecagui.business;
 
+import com.bajo.biblioteca.bean.impl.PessoaRemote;
 import com.bajo.biblioteca.model.Pessoa;
+import com.client.bibliotecagui.invoker.InvokerPessoa;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.AfterEach;
@@ -13,34 +15,56 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
-import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
+import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.doAnswer;
+import org.mockito.MockitoAnnotations;
+import org.mockito.junit.MockitoJUnitRunner;
 
 /**
  *
  * @author bajinho
  */
-@TestMethodOrder(OrderAnnotation.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@RunWith(MockitoJUnitRunner.class)
 public class PessoasControllerTest {
-    
-    private final PessoasController instance = new PessoasController();
-    
+
+    @Mock
+    private final PessoaRemote pessoaRemote;
+
+    private final List<Pessoa> pessoaList = new ArrayList<>();
+
+    private final Pessoa p = new Pessoa();
+
     public PessoasControllerTest() {
+        this.pessoaRemote = InvokerPessoa.invokePessoaStatelessBean();
     }
-    
+
     @BeforeAll
-    public static void setUpClass() {
+    public void setUpClass() {
+        MockitoAnnotations.openMocks(this);
     }
-    
+
     @AfterAll
     public static void tearDownClass() {
     }
-    
+
     @BeforeEach
-    public void setUp() {
+    public void setUp() throws Exception {
+        p.setId(100L);
+        p.setNome("PessoaNomeTest");
+        pessoaList.add(p);
+        when(this.pessoaRemote.salvar(any(Pessoa.class))).thenReturn(p);
+        when(this.pessoaRemote.consultarPorNome(any(String.class))).thenReturn((List<Pessoa>) pessoaList);
     }
-    
+
     @AfterEach
     public void tearDown() {
     }
@@ -52,8 +76,9 @@ public class PessoasControllerTest {
     @Order(1)
     public void testAdicionar() throws Exception {
         System.out.println("adicionar");
-        String nome = "teste";
-        instance.adicionar(nome);
+        pessoaRemote.salvar(p);
+        assertTrue(!p.getNome().isBlank());
+        assertNotNull(pessoaRemote.salvar(p));
     }
 
     /**
@@ -63,9 +88,12 @@ public class PessoasControllerTest {
     @Order(2)
     public void testAtualizar() throws Exception {
         System.out.println("atualizar");
-        Pessoa pessoa = instance.filtrar("teste").getFirst();
+
+        Pessoa pessoa = pessoaRemote.consultarPorNome("PessoaNomeTest").getFirst();
         pessoa.setNome("teste");
-        instance.atualizar(pessoa);
+        pessoaRemote.salvar(pessoa);
+        assertTrue(!p.getNome().isBlank());
+        assertNotNull(pessoaRemote.salvar(pessoa));
     }
 
     /**
@@ -75,13 +103,8 @@ public class PessoasControllerTest {
     @Order(3)
     public void testFiltrar() {
         System.out.println("filtrar");
-        String nome = "teste";
-        Pessoa p = new Pessoa();
-        List<Pessoa> l = new ArrayList();
-        p.setNome(nome);
-        l.add(p);
-        List<Pessoa> expResult = l;
-        List<Pessoa> result = instance.filtrar(nome);
+        List<Pessoa> expResult = pessoaList;
+        List<Pessoa> result = pessoaRemote.consultarPorNome("PessoaNomeTest");
         assertEquals(expResult.getFirst().getNome(), result.getFirst().getNome());
     }
 
@@ -91,9 +114,16 @@ public class PessoasControllerTest {
     @Test
     @Order(4)
     public void testDeletar() throws Exception {
-        System.out.println("deletar");
-        Long id = instance.filtrar("teste").getFirst().getId();
-        instance.deletar(id);
+
+//        Mockito.doThrow(Exception.class).when(this.pessoaRemote).excluir(any(Long.class));
+        doAnswer((i) -> {
+            System.out.println("deletar");
+            Long id = pessoaRemote.consultarPorNome("PessoaNomeTest").getFirst().getId();
+            pessoaRemote.excluir(id);
+            assertTrue(id.equals(i.getArgument(0)));
+            return null;
+        }).when(pessoaRemote).excluir(any(Long.class));
+
     }
-    
+
 }
