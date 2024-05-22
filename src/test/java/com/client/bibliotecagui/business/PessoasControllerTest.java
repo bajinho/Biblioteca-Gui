@@ -52,10 +52,6 @@ public class PessoasControllerTest {
         MockitoAnnotations.openMocks(this);
     }
 
-    @AfterAll
-    public static void tearDownClass() {
-    }
-
     @BeforeEach
     public void setUp() throws Exception {
         p.setId(100L);
@@ -63,10 +59,6 @@ public class PessoasControllerTest {
         pessoaList.add(p);
         when(this.pessoaRemote.salvar(any(Pessoa.class))).thenReturn(p);
         when(this.pessoaRemote.consultarPorNome(any(String.class))).thenReturn((List<Pessoa>) pessoaList);
-    }
-
-    @AfterEach
-    public void tearDown() {
     }
 
     /**
