@@ -9,8 +9,6 @@ import com.bajo.biblioteca.model.Pessoa;
 import com.client.bibliotecagui.invoker.InvokerPessoa;
 import java.util.ArrayList;
 import java.util.List;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -84,7 +82,7 @@ public class PessoasControllerTest {
         Pessoa pessoa = pessoaRemote.consultarPorNome("PessoaNomeTest").getFirst();
         pessoa.setNome("teste");
         pessoaRemote.salvar(pessoa);
-        assertTrue(!p.getNome().isBlank());
+        assertFalse(p.getNome().isBlank());
         assertNotNull(pessoaRemote.salvar(pessoa));
     }
 
