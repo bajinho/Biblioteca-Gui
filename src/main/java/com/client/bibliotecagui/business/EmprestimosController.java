@@ -25,13 +25,13 @@ public class EmprestimosController {
         this.emprestimoRemote = InvokerEmprestimo.invokeEmprestimoStatelessBean();
     }
 
-    public void adicionar(String nome) throws Exception {
-        Emprestimo e = new Emprestimo();
+    public Emprestimo adicionar(Emprestimo e) throws Exception {
 //        e.setNome(nome);
 //        if (nome.isBlank() == false) {
 //            pessoaRemote.salvar(p);
 ////                JOptionPane.showMessageDialog(null, p.getNome() +  " salvo com sucesso!", "Salvo", JOptionPane.WARNING_MESSAGE);
 //        }
+          return emprestimoRemote.consultarPorId(e.getId());
     }
 
     public void atualizar(Emprestimo emprestimo) throws Exception {
